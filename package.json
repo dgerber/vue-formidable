@@ -1,0 +1,27 @@
+{
+  "name": "vue-formidable",
+  "version": "0.1.0",
+  "author": "Daniel Gerber <daniel.g.gerber@gmail.com>",
+  "license": "MIT",
+  "description": "Vue component to build forms from JSON Schemas",
+  "keywords": [
+    "vue.js",
+    "JSON Schema",
+    "HTML forms"
+  ],
+  "main": "src/form.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dgerber/vue-formidable.git"
+  },
+  "bugs": "https://github.com/dgerber/vue-formidable/issues",
+  "dependencies": {
+    "vue": "^0.12.0",
+    "z-schema": "^3.9.2",
+    "vue-select-js": "git://github.com/dgerber/vue-select-js#master"
+  },
+  "devDependencies": {
+    "browserify": "~10.2.3"
+  },
+  "browserify": { "transform": [ "brfs" ] }
+}

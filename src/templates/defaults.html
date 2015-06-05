@@ -1,0 +1,170 @@
+
+<template id="string">
+  <div class="vf-input-group">
+    <label>{{ title || key }}</label>
+    <input v-model="value"
+           v-attr="type: inputType, name: path, required: required,
+                   maxlength: schema.maxLength, pattern: schema.pattern,
+                   placeholder: placeholder,
+                   readonly: readonly, disabled: disabled"
+           v-el="input"/>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+  </div>
+</template>
+
+
+<template id="textarea">
+  <div class="vf-input-group">
+    <label>{{ title || key }}</label>
+    <textarea v-model="value"
+              v-attr="name: path, required: required,
+                      maxlength: schema.maxLength,
+                      placeholder: placeholder,
+                      readonly: readonly, disabled: disabled,
+                      rows: rows, cols: cols, wrap: wrap"
+              v-el="input"></textarea>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+  </div>
+</template>
+
+
+<template id="number">
+  <div class="vf-input-group">
+    <label>{{ title || key }}</label>
+    <input v-model="value"
+           v-attr="type: inputType, name: path, required: required,
+                   min: min, max: max, step: step,
+                   placeholder: placeholder,
+                   readonly: readonly, disabled: disabled"
+           v-el="input" number/>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+  </div>
+</template>
+
+
+<template id="checkbox">
+  <div class="vf-input-group">
+    <label>{{ title || key }}</label>
+    <input type="checkbox" v-model="value" v-el="input"
+           v-attr="name: path"/>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+  </div>
+</template>
+
+
+<template id="select">
+  <div class="vf-input-group">
+    <label>{{ title || key }}</label>
+    <select-js value="{{value}}" opts="{{options}}" v-el="input"
+               v-attr="name: path"></select-js>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+  </div>
+</template>
+
+
+<template id="object">
+  <fieldset class="vf-object">
+    <legend>{{ title || key }}</legend>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+    <input type="button" disabled="{{ nProperties >= maxProperties }}"
+           v-on="click: addProp(null)" value="➕" title="Add property"/>
+    <ul>
+      <template v-repeat="subfields" v-ref="sub" track-by="key">
+        <li class="vf-item" v-class="inactive: !required && !hasProp(key)">
+          <template v-if="!isAction">
+            <input type="button" disabled="{{ required }}"
+                   v-on="click: toggleProp(key)"
+                   value="{{ hasProp(key) ? '❌' : '➕ '+key }}"
+                   title="{{ hasProp(key) ? 'Remove' : 'Add' }} {{ key }}"
+                   class="vf-add-remove-item"/>
+          </template>
+          <component v-if="required || hasProp(key) || isAction"
+                     is="{{ resolveComponent(schema, form) }}"
+                     schema="{{schema}}" form="{{form}}" value="{{value[key]}}"
+                     key="{{key}}" path="{{ path ? path+'['+key+']' : key }}"
+                     required="{{required}}"
+                     v-ref="c"></component>
+        </li>
+      </template>
+    </ul>
+  </fieldset>
+</template>
+
+
+<template id="array">
+  <fieldset class="vf-array">
+    <legend>{{ title || key }}</legend>
+    <div v-if="description" class="vf-desc">{{ description }}</div>
+    <ol>
+      <li class="vf-item" v-repeat="subfields" v-ref="sub" track-by="$index">
+        <input type="button" disabled="{{ value.length <= minLength }}"
+               v-on="click: removeItem($index)" value="❌"
+               title="Remove this item ({{ $index }})"
+               class="vf-add-remove-item"/>
+        <component is="{{ resolveComponent(schema, form) }}"
+                   schema="{{schema}}" form="{{form}}" value="{{value[$index]}}"
+                   key="{{$index}}" path="{{ path ? path+'['+$index+']' : $index }}"
+                   required="{{required}}" v-ref="c"></component>
+      </li>
+    </ol>
+    <input type="button" disabled="{{ value.length >= maxLength }}"
+           v-on="click: addItem" value="➕" title="Add item"/>
+  </fieldset>
+</template>
+
+
+<template id="generic">
+  <header>{{ title || description || key }}</header>
+
+  <div v-if="typeOptions">
+    <select title="type" v-model="selectedType">
+      <option value disabled selected>--type--</option>
+      <option v-repeat="typeOptions">{{$value}}</option>
+    </select>
+  </div>
+
+  <div v-if="oneOfOptions">
+    <template v-repeat="oneOfOptions">
+      <select-js title="oneOf-{{$index}}"
+                 value="{{selectedOneOfs[$index]}}"
+                 opts="{{$value}}"
+                 placeholder="--oneOf--"></select-js>
+    </template>
+  </div>
+
+  <div v-if="anyOfOptions">
+    <template v-repeat="anyOfOptions">
+      <select-js title="anyOf-{{$index}}"
+                 value="{{selectedAnyOfs[$index]}}"
+                 opts="{{$value}}"
+                 placeholder="--anyOf--" multiple></select-js>
+    </template>
+  </div>
+
+  <component v-if="currentComponent"
+             is="{{ currentComponent }}"
+             schema="{{currentSchema}}" form="{{currentForm}}"
+             value="{{value}}"
+             key="{{key}}" required="{{required}}"
+             v-ref="c"></component>
+
+</template>
+
+
+<template id="form">
+  <div class="validation" v-class="hasErrors: errors">
+    <div v-if="!errors">✓</div>
+    <div v-repeat="errors">
+      {{path}}: {{message}}
+    </div>
+    <component is="{{ resolveComponent(resolvedSchema, form) }}"
+               schema="{{resolvedSchema}}" form="{{form}}" value="{{value}}"
+               v-ref="c"></component>
+  </div>
+</template>
+
+
+
+<template id="button">
+  <input v-attr="type: type, value: title, title: description" v-on="click: click"/>
+</template>
