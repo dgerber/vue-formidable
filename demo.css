@@ -1,0 +1,66 @@
+#demo {}
+
+#schema, #form {
+    width: 48%; display: inline-block; vertical-align: top
+}
+
+.debug:not(:hover) {
+    position: absolute; opacity: .2;
+}
+
+/* .validation { */
+/*     border: 1px solid green; */
+/* } */
+.validation.hasErrors {
+    border: 3px solid darkred;
+}
+
+
+input[disabled] {
+    opacity: .2;
+}
+
+.vf-input-group {
+    max-width: 12rem;
+    border-left: 2px solid lightblue;
+    padding: .1rem .3rem;
+}
+/* .vf-input-group > label { display: block; } */
+
+.vf-object {
+    /* display: flex; */
+}
+.vf-object > ul {
+    /* flex: 1 1 100%; */
+    /* display: flex; flex-flow: row wrap; */
+}
+.vf-object > ul > li.inactive {
+    /* margin: 0; order: -1; */
+}
+.vf-array > ol {
+    /* flex: 1 1 100%; */
+    /* display: flex; flex-flow: column wrap; */
+}
+.vf-array > ol, .vf-object > ul {
+    padding: 0;
+    /* align-items: flex-start; */
+}
+.vf-item {
+    margin: 1rem;
+    display: flex; flex-flow: row;
+}
+
+.vf-add-remove-item {
+    flex: 0 0 auto; align-self: flex-start; /* order: 2; */
+    border: none; background: none; cursor: pointer;
+}
+.vf-item input[value=❌] {
+    color: maroon;
+}
+.vf-item input[value=➕] {
+    color: darkblue;
+}
+
+.vf-desc {
+    font-size: x-small;
+}

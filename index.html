@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="demo.css"/>
+  </head>
+  <body>
+
+    <div id="demo" inline-template>
+
+      <div id="schema">
+        <select-js value="{{example}}"
+                   opts="{{* examples}}"
+                   placeholder="--examples--"></select-js>
+        <pre>
+          {{ example | json }}
+        </pre>
+      </div>
+
+      <div id="form" v-if="example">
+        <vf-form schema="{{example.schema}}"
+                 form="{{example.form}}"
+                 value="{{example.value}}"
+                 v-ref="form">
+        </vf-form>
+      </div>
+
+    </div>
+
+    <script src="demo.bf.js"></script>
+
+  </body>
+</html>
